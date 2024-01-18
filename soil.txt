@@ -1,0 +1,1016 @@
+npm start
+
+npm install
+
+npm run build
+
+
+Microsoft Windows [Version 10.0.19045.3803]
+(c) Microsoft Corporation. All rights reserved.
+
+E:\pl>npm install -g create-react-app
+npm WARN deprecated tar@2.2.2: This version of tar is no longer supported, and will not receive security updates. Please upgrade asap.
+
+changed 67 packages in 25s
+
+5 packages are looking for funding
+  run `npm fund` for details
+npm notice
+npm notice New minor version of npm available! 10.1.0 -> 10.3.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v10.3.0
+npm notice Run npm install -g npm@10.3.0 to update!
+npm notice
+
+E:\pl>create-react-app myapp
+
+Creating a new React app in E:\pl\myapp.
+
+Installing packages. This might take a couple of minutes.
+Installing react, react-dom, and react-scripts with cra-template...
+
+
+added 1484 packages in 5m
+
+250 packages are looking for funding
+  run `npm fund` for details
+
+Initialized a git repository.
+
+Installing template dependencies using npm...
+
+added 69 packages, and changed 1 package in 18s
+
+254 packages are looking for funding
+  run `npm fund` for details
+Removing template package using npm...
+
+
+removed 1 package, and audited 1553 packages in 7s
+
+254 packages are looking for funding
+  run `npm fund` for details
+
+8 vulnerabilities (2 moderate, 6 high)
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+
+Created git commit.
+
+Success! Created myapp at E:\pl\myapp
+Inside that directory, you can run several commands:
+
+  npm start
+    Starts the development server.
+
+  npm run build
+    Bundles the app into static files for production.
+
+  npm test
+    Starts the test runner.
+
+  npm run eject
+    Removes this tool and copies build dependencies, configuration files
+    and scripts into the app directory. If you do this, you can’t go back!
+
+We suggest that you begin by typing:
+
+  cd myapp
+  npm start
+
+Happy hacking!
+
+E:\pl>cd myapp
+
+E:\pl\myapp>npm start
+
+> myapp@0.1.0 start
+> react-scripts start
+
+(node:15928) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:15928) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+One of your dependencies, babel-preset-react-app, is importing the
+"@babel/plugin-proposal-private-property-in-object" package without
+declaring it in its dependencies. This is currently working because
+"@babel/plugin-proposal-private-property-in-object" is already in your
+node_modules folder for unrelated reasons, but it may break at any time.
+
+babel-preset-react-app is part of the create-react-app project, which
+is not maintianed anymore. It is thus unlikely that this bug will
+ever be fixed. Add "@babel/plugin-proposal-private-property-in-object" to
+your devDependencies to work around this error. This will make this message
+go away.
+Compiled successfully!
+
+You can now view myapp in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.56.1:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled successfully
+^C^CTerminate batch job (Y/N)? y
+
+E:\pl\myapp>npm install bootstrap
+
+added 2 packages, and audited 1555 packages in 9s
+
+256 packages are looking for funding
+  run `npm fund` for details
+
+8 vulnerabilities (2 moderate, 6 high)
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+
+E:\pl\myapp>code .
+
+E:\pl\myapp>
+
+
+components
+ProductForm.js
+import React, { useState } from 'react';
+
+const ProductForm = ({ onAdd }) => {
+  const [productName, setProductName] = useState('');
+  const [productQuantity, setProductQuantity] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const id = Date.now(); // Assuming you want to generate a unique id based on the current timestamp
+
+    onAdd({
+      id,
+      name: productName,
+      quantity: parseInt(productQuantity, 10) || 0,
+      price: 0,
+    });
+
+    setProductName('');
+    setProductQuantity('');
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="mb-3">
+      <div className="form-row">
+        <div className="col">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="enter product name"
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
+          />
+        </div>
+        <div className="col">
+          <button type="submit" className="btn btn-primary">
+            Add Product
+          </button>
+        </div>
+      </div>
+    </form>
+  );
+};
+
+export default ProductForm;
+
+
+ProductList.js
+import React from 'react';
+import ProductUpdate from './ProductUpdate';
+
+const ProductList = ({ products, onDelete, onUpdatePrice }) => {
+  return (
+    <ul className="list-group">
+      {products.map((product) => (
+        <li key={product.id} className="list-group-item">
+          <div className="d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{product.name}</strong> - Quantity: {product.quantity} - ID: {product.id} - Price: Rs{product.price}
+            </div>
+            <div>
+              <button className="btn btn-danger mr-2" onClick={() => onDelete(product.id)}>
+                Delete
+              </button>
+
+              <ProductUpdate productID={product.id} currentPrice={product.price} onUpdatePrice={onUpdatePrice} />
+            </div>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+export default ProductList;
+
+ProductUpdate.js
+import React, { useState } from 'react';
+
+const ProductUpdate = ({ productID, currentPrice, onUpdatePrice }) => {
+  const [newPrice, setNewPrice] = useState(currentPrice);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onUpdatePrice(productID, parseFloat(newPrice));
+    setNewPrice(currentPrice);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="d-inline">
+      <label className="mr-2">New Price:</label>
+      <input
+        type="number"
+        value={newPrice}
+        onChange={(e) => setNewPrice(e.target.value)}
+        className="mr-2"
+      />
+
+      <button type="submit" className="btn btn-success">
+        Update Price
+      </button>
+    </form>
+  );
+};
+
+export default ProductUpdate;
+
+
+App.js
+
+import React, { useState } from 'react';
+import ProductList from './components/ProductList';
+import ProductForm from './components/ProductForm';
+
+const App = () => {
+  const [products, setProducts] = useState([
+    { id: 1, name: 'prod1', quantity: 10, price: 10 },
+    { id: 2, name: 'prod2', quantity: 1, price: 100 }
+  ]);
+
+  const handleAddProduct = (newProduct) => {
+    setProducts([...products, newProduct]);
+  };
+
+  const handleDeleteProduct = (productID) => {
+    const updatedProducts = products.filter((product) => product.id !== productID);
+    setProducts(updatedProducts);
+  };
+
+  const handleUpdateProductPrice = (productID, newPrice) => {
+    const updatedProducts = products.map((product) =>
+      product.id === productID ? { ...product, price: newPrice } : product
+    );
+    setProducts(updatedProducts);
+  };
+
+  return (
+    <div className="container">
+      <h1 className="mt-4">ProductCrudApp</h1>
+      <ProductForm onAdd={handleAddProduct} />
+      <ProductList products={products} onDelete={handleDeleteProduct} onUpdatePrice={handleUpdateProductPrice} />
+    </div>
+  );
+};
+
+export default App;
+
+index.css
+
+body{font-family:'arial', sanserif; 
+  margin:20px;}
+h1{color:#007bff;}
+ul{list-style:none;padding:0}
+li{margin:10px ;padding :10px; border:1px solid #ddd; border-radius:5px;}
+label{margin-right:10pz;}
+button{cursor:pointer;}
+
+-------------------------
+script.js
+function handleRegistration() {
+    const username = document.getElementById('username').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const birthdate = document.getElementById('birthdate').value;
+    const joiningDate = document.getElementById('joiningDate').value;
+    const genderOptions = document.getElementsByName('gender');
+    let selectedGender = '';
+
+    // Username validation
+    if (username.trim() === '') {
+        alert('Username cannot be blank');
+        return false;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        alert('Invalid email format');
+        return false;
+    }
+
+    // Password validation
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+    if (!passwordRegex.test(password)) {
+        alert('Password must contain at least one uppercase letter, one lowercase letter, and be at least 6 characters long');
+        return false;
+    }
+
+    // Confirm Password validation
+    if (password !== confirmPassword) {
+        alert('Passwords do not match');
+        return false;
+    }
+
+    // Birthdate validation
+    const selectedDate = new Date(birthdate);
+    const minBirthdate = new Date('01-01-2012'); 
+    
+    if (selectedDate >= minBirthdate) {
+        alert('Invalid birthdate');
+        return false;
+    }
+
+
+        // Joining Date validation
+    const minJoiningDate = new Date();
+    minJoiningDate.setDate(minJoiningDate.getDate() - 30);
+    
+    const selectedJoiningDate = new Date(joiningDate);
+    
+    if (!(selectedJoiningDate >= minJoiningDate && selectedJoiningDate <= new Date())) {
+        alert('Invalid joining date. It should be within the last 30 days.');
+        return false;
+    }
+
+
+    // Gender validation
+    for (const genderOption of genderOptions) {
+        if (genderOption.checked) {
+            selectedGender = genderOption.value;
+            break;
+        }
+    }
+
+    if (selectedGender === '') {
+        alert('Please select a gender');
+        return false;
+    }
+    
+    const subjectsOptions = document.getElementsByName('subjects');
+    let selectedSubjects = [];
+
+    for (const subjectsOption of subjectsOptions) {
+        if (subjectsOption.checked) {
+            selectedSubjects.push(subjectsOption.value);
+        }
+    }
+
+    if (selectedSubjects.length === 0) {
+        alert('Please select at least one subject');
+        return false;
+    }
+
+    // If all validations pass, you can perform further actions or submit the form
+    alert('Registration successful!');
+    // If all validations pass, store the data in URL parameters and redirect
+    const queryParams = `?username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&birthdate=${encodeURIComponent(birthdate)}&joiningDate=${encodeURIComponent(joiningDate)}&gender=${encodeURIComponent(selectedGender)}&subjects=${encodeURIComponent(selectedSubjects.join(','))}`;
+
+    // Example: Navigate to a new page with URL parameters
+    window.location.href = `success.html${queryParams}`;
+}
+
+
+index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Registration Form</title>
+</head>
+<body>
+
+    <div class="container">
+        <form id="registrationForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required></br>
+        
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required></br>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required></br>
+
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required></br>
+
+            <label for="birthdate">Birthdate:</label>
+            <input type="date" id="birthdate" name="birthdate" required></br>
+
+            <label for="joiningDate">Joining Date:</label>
+            <input type="date" id="joiningDate" name="joiningDate" required></br>
+
+            <label>Gender:</label>
+            <div class="gender-options">
+                <input type="radio" id="male" name="gender" value="male" required>
+                <label for="male">Male</label>
+
+                <input type="radio" id="female" name="gender" value="female" required>
+                <label for="female">Female</label>
+
+                <input type="radio" id="other" name="gender" value="other" required>
+                <label for="other">Other</label>
+            </div>
+            
+
+            <label>Subjects:</label>
+            <div class="subject-options">
+                <input type="checkbox" id="physics" name="subjects" value="physics">
+                <label for="physics">Physics</label>
+
+                <input type="checkbox" id="chemistry" name="subjects" value="chemistry">
+                <label for="chemistry">Chemistry</label>
+
+                <input type="checkbox" id="science" name="subjects" value="science">
+                <label for="science">Science</label>
+            </div>
+
+          <input type="button" value="Register" class="full-width" onclick="handleRegistration()">
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+success.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Success</title>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Registration Successful!</h1>
+
+        <div id="userInfo">
+            <!-- Display user information here -->
+        </div>
+    </div>
+
+    <script src="nextpage.js"></script>
+</body>
+</html>
+
+
+style.css
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: 70%;
+    margin: auto;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+label {
+    font-weight: bold;
+}
+
+.gender-options,
+.subject-options {
+    display: flex;
+    gap: 10px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+nextpage.js
+// Retrieve URL parameters and display user information
+document.addEventListener('DOMContentLoaded', function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userInfoContainer = document.getElementById('userInfo');
+
+    if (urlParams.has('username')) {
+        userInfoContainer.innerHTML += `<p><strong>Username:</strong> ${urlParams.get('username')}</p>`;
+    }
+
+    if (urlParams.has('email')) {
+        userInfoContainer.innerHTML += `<p><strong>Email:</strong> ${urlParams.get('email')}</p>`;
+    }
+
+    if (urlParams.has('birthdate')) {
+        userInfoContainer.innerHTML += `<p><strong>Birthdate:</strong> ${urlParams.get('birthdate')}</p>`;
+    }
+
+    if (urlParams.has('joiningDate')) {
+        userInfoContainer.innerHTML += `<p><strong>Joining Date:</strong> ${urlParams.get('joiningDate')}</p>`;
+    }
+
+    if (urlParams.has('gender')) {
+        userInfoContainer.innerHTML += `<p><strong>Gender:</strong> ${urlParams.get('gender')}</p>`;
+    }
+
+    if (urlParams.has('subjects')) {
+        const subjects = urlParams.get('subjects').split(',');
+        userInfoContainer.innerHTML += `<p><strong>Subjects:</strong> ${subjects.join(', ')}</p>`;
+    }
+});
+-----------------
+public class GFG {
+ 
+    public static void main(String[] args)
+    {
+ 
+        Integer[] a = { 100, 22, 58, 41, 6, 50 };
+ 
+        Character[] c = { 'v', 'g', 'a', 'c', 'x', 'd', 't' };
+ 
+        String[] s = { "Virat", "Rohit", "Abhinay", "Chandu","Sam", "Bharat", "Kalam" };
+ 
+        System.out.print("Sorted Integer array :  ");
+        sort_generics(a);
+ 
+        System.out.print("Sorted Character array :  ");
+        sort_generics(c);
+ 
+        System.out.print("Sorted String array :  ");
+        sort_generics(s);
+       
+    }
+ 
+    public static <T extends Comparable<T> > void sort_generics(T[] a)
+    {
+       
+         //As we are comparing the Non-primitive data types 
+          //we need to use Comparable class
+       
+        //Bubble Sort logic
+        for (int i = 0; i < a.length - 1; i++) {
+ 
+            for (int j = 0; j < a.length - i - 1; j++) {
+ 
+                if (a[j].compareTo(a[j + 1]) > 0) {
+ 
+                    swap(j, j + 1, a);
+                }
+            }
+        }
+ 
+        // Printing the elements after sorted
+ 
+        for (T i : a) 
+        {
+            System.out.print(i + ", ");
+        }
+        System.out.println();
+       
+    }
+ 
+    public static <T> void swap(int i, int j, T[] a)
+    {
+        T t = a[i];
+        a[i] = a[j];
+        a[j] = t;
+    }
+   
+}
+================================
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu-Driven Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;}
+
+        input, button, span {
+            font-size: 16px;
+            margin: 5px;
+            padding: 8px;}
+
+        table {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 50%;
+            margin-left: auto;
+            margin-right: auto;}
+
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Menu-Driven Calculator</h1>
+
+    <label for="num1">Enter Number 1:</label>
+    <input type="number" id="num1" placeholder="Enter a number">
+
+    <label for="num2">Enter Number 2:</label>
+    <input type="number" id="num2" placeholder="Enter another number">
+
+    <button onclick="performOperation()">Perform Operation</button>
+
+    <p>Result: <span id="result"></span></p>
+
+    <div id="table-container"></div>
+
+    <script>
+        function performOperation() {
+            var num1 = parseFloat(document.getElementById("num1").value);
+            var num2 = parseFloat(document.getElementById("num2").value);
+
+            var operation = prompt("Choose an operation:\n1. Add\n2. Subtract\n3. Multiply\n4. Divide\n5. Display Table\n6. Factorial\n7. Power\n8. Sum of Digits");
+
+            switch (operation) {
+                case "1":
+                    displayResult(num1 + num2);
+                    break;
+                case "2":
+                    displayResult(num1 - num2);
+                    break;
+                case "3":
+                    displayResult(num1 * num2);
+                    break;
+                case "4":
+                    if (num2 !== 0) {
+                        displayResult(num1 / num2);
+                    } else {
+                        displayResult("Cannot divide by zero");
+                    }
+                    break;
+                case "5":
+                    displayTable(num1);
+                    break;
+                case "6":
+                    displayResult(factorial(num1));
+                    break;
+                case "7":
+                    displayResult(power(num1, num2));
+                    break;
+                case "8":
+                    displayResult(sumOfDigits(num1));
+                    break;
+                default:
+                    displayResult("Invalid operation");
+                    break;
+            }
+        }
+
+        function displayResult(result) {
+            document.getElementById("result").innerHTML = result;
+            document.getElementById("table-container").innerHTML = ""; // Clear table container
+        }
+
+        function displayTable(number) {
+            var tableContainer = document.getElementById("table-container");
+
+            // Create a table element
+            var table = document.createElement("table");
+
+            // Create table header
+            var headerRow = table.insertRow(0);
+            var headerCell = headerRow.insertCell(0);
+            headerCell.innerHTML = "<b>Number</b>";
+
+            // Create table row with the number and its multiples
+            for (var i = 1; i <= 10; i++) {
+                var row = table.insertRow(i);
+                var cell = row.insertCell(0);
+                cell.innerHTML = number + " x " + i + " = " + (number * i);
+            }
+
+            // Append the table to the container
+            tableContainer.innerHTML = "";
+            tableContainer.appendChild(table);
+        }
+
+        function factorial(n) {
+            if (n === 0 || n === 1) {
+                return 1;
+            } else {
+                return n * factorial(n - 1);
+            }
+        }
+
+        function power(base, exponent) {
+            return Math.pow(base, exponent);
+        }
+
+        function sumOfDigits(number) {
+            var sum = 0;
+            var numString = number.toString();
+
+            for (var i = 0; i < numString.length; i++) {
+                sum += parseInt(numString[i]);
+            }
+
+            return sum;
+        }
+    </script>
+
+</body>
+</html>
+
+---------------------------
+
+app.js
+
+// add libraries
+
+const express=require("express");
+const app=express();
+const bodyparser=require("body-parser");
+const path=require("path");
+
+// add url handling routes
+
+const routes=require("./routes/router");
+
+// configure the applicatio
+app.set("views",path.join(__dirname,"views"))
+app.set("view engine","ejs")
+
+app.use(bodyparser.urlencoded({extended:false}));
+
+app.use("/",routes);
+
+
+views
+addbook.ejs
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>form</title>
+</head>
+<body>
+    <div>
+        <form action="insertbook" method="post">
+            <table>
+                <tr>
+                    <td>Bookid</td>&nbsp;
+                    <td><input type="number" id="bid" name="bid"/></td>
+                </tr>
+                <tr>
+                    <td>Book title</td>&nbsp;
+                    <td>
+                        <input type="text" id="title" name="title"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Book author</td>&nbsp;
+                    <td>
+                        <input type="text" id="author" name="author"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Book price</td>&nbsp;
+                    <td>
+                        <input type="number" id="price" name="price"/>
+                    </td>
+                </tr>
+                <tr>
+                    
+                    <td>
+                        <button type="submit" id="btn" name="btn">submit</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    
+</body>
+</html>
+
+editbook.ejs
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>form</title>
+</head>
+<body>
+    <div>
+        <form action="/updatebook/<%=book.bid%>" method="post">
+
+            <table>
+                <tr>
+                    <td>Bookid</td>&nbsp;
+                    <td><input type="number" id="bid" name="bid" value="<%=book.bid %>"/></td>
+                </tr>
+                <tr>
+                    <td>Book title</td>&nbsp;
+                    <td>
+                        <input type="text" id="title" name="title" value="<%=book.title %>"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Book author</td>&nbsp;
+                    <td>
+                        <input type="text" id="author" name="author" value="<%=book.author %>"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Book price</td>&nbsp;
+                    <td>
+                        <input type="number" id="price" name="price" value="<%=book.price %>"/>
+                    </td>
+                </tr>
+                <tr>
+                    
+                    <td>
+                        <button type="submit" id="btn" name="btn">submit</button>
+                    </td>
+                </tr>
+
+            </table>
+        </form>
+    </div>
+    
+</body>
+</html>
+
+table.js
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table</title>
+</head>
+<body>
+    <header>
+        <h1>Book Management</h1>
+    </header>
+    <div>
+        <form action="/addbook">
+            <button type="submit" id="add" name="add">Add Book</button>
+        </form>
+        <br/>
+        <table border="2">
+            <tr>
+                <th>Book Id</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Prices</th>
+                <th>Delete</th>
+                <th>Edit</th>
+            </tr>
+            <% for(var i=0;i<bookarr.length;i++){%>
+                <tr>
+                    <td><%=bookarr[i].bid%></td>
+                    <td><%=bookarr[i].title%></td>
+                    <td><%=bookarr[i].author%></td>
+                    <td><%=bookarr[i].price%></td>
+                    <td><a href="/deletebook/<%=bookarr[i].bid%>">Delete</a></td>
+                    <td><a href="/editbook/<%=bookarr[i].bid%>">Edit</a></td>
+                </tr>
+            <%}%>
+        </table>
+    </div>
+</body>
+</html>
+
+
+routes
+router.js
+const express=require("express");
+var myrouter=express.Router();
+
+var connection=require("../db/dbutils")
+
+myrouter.get("/books",function(req,resp){
+    connection.query("select * from book",(err,data,fields)=>{
+        if(err){
+            resp.status(500).send("server error");
+        }
+        else{
+            resp.render("table",{bookarr:data})
+        }
+    })
+});
+
+myrouter.get("/addbook",function(req,resp){
+    resp.render("addbook")
+});
+
+myrouter.post("/insertbook",function(req,resp){
+    connection.query("insert into book values(?,?,?,?)",[req.body.bid,req.body.author,req.body.title,req.body.price],(err,data)=>{
+        if(err){
+            resp.status(500).send("server error");
+        }
+        else{
+            resp.redirect("/books")
+        }
+    })
+});
+
+myrouter.get("/deletebook/:bid",function(req,resp){
+    connection.query("delete from book where bid=?",[req.params.bid],(err,data)=>{
+        if(err){
+            resp.status(500).send("server error");
+        }
+        else{
+            resp.redirect("/books")
+        }
+    })
+});
+
+myrouter.get("/editbook/:bid",function(req,resp){
+    connection.query("select * from book where bid=?",[req.params.bid],(err,data)=>{
+        if(err){
+            resp.status(500).send("server error");
+        }
+        else{
+            console.log({data})
+            resp.render("editbook",{book:data[0]})
+        }
+    })
+});
+
+myrouter.post("/updatebook/:bid",function(req,resp){
+    connection.query("update book set title=?, author=?, price=? where bid=?",[req.body.title,req.body.author,req.body.price,req.body.bid],(err)=>{
+        if(err){
+            console.log(err)
+            resp.status(500).send("server error");
+        }
+        else{
+            resp.redirect("/books")
+        }
+    })
+});
+
+module.exports=myrouter;
+
+
+db
+dbutils.js
+const mysql=require("mysql");
+var mysqlconnection=mysql.createConnection(
+    {
+        host:'localhost',
+        user:'root',
+        password:'root123',
+        database:'test',
+        port:3306
+    }
+);
+
+mysqlconnection.connect((err)=>{
+    console.log("in connect");
+    if(!err)
+    {
+        console.log(" database connected");
+    }
+    else
+    {
+        console.log(" server error",err);
+    }
+});
+
+module.exports=mysqlconnection;
+
+
+
+
+
+
